@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="595.0" prefWidth="698.0" xmlns="http://javafx.com/javafx/15.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.openq.ivasp.controller.DetailDialogController">
+
+   <center>
+      <TableView fx:id="infoAtomCoordinate" prefHeight="515.0" prefWidth="618.0" BorderPane.alignment="CENTER">
+      </TableView>
+   </center>
+   <top>
+      <TableView fx:id="infoAttributeTable" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+   </top>
+</BorderPane>

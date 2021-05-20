@@ -1,0 +1,43 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.4.10'
+    id 'org.openjfx.javafxplugin' version '0.0.9'
+}
+
+javafx {
+    version = "11.0.2"
+    modules "javafx.controls", "javafx.fxml"
+}
+
+group 'openq'
+
+version '1.0-SNAPSHOT'
+
+processResources {
+    from("/src/main/resource") {
+        include "/fxml/**.fxml"
+    }
+}
+repositories {
+    //mavenLocal()
+    maven {url 'https://maven.aliyun.com/repository/central'}
+    mavenCentral()
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib"
+
+    // https://mvnrepository.com/artifact/org.openjfx/javafx-controls
+    implementation group: 'org.openjfx', name: 'javafx-controls', version: '11.0.2'
+
+    // https://mvnrepository.com/artifact/org.openjfx/javafx-base
+    compile group: 'org.openjfx', name: 'javafx-base', version: '11.0.2'
+
+    // https://mvnrepository.com/artifact/org.openjfx/javafx-graphics
+    compile group: 'org.openjfx', name: 'javafx-graphics', version: '11.0.2'
+
+    // https://mvnrepository.com/artifact/org.openjfx/javafx-fxml
+    compile group: 'org.openjfx', name: 'javafx-fxml', version: '11.0.2'
+}
+
+
+
