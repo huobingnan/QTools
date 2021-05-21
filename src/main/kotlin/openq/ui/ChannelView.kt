@@ -5,6 +5,7 @@ import javafx.geometry.Pos
 import javafx.scene.control.*
 import javafx.scene.image.ImageView
 import javafx.scene.layout.BorderPane
+import javafx.scene.layout.GridPane
 import javafx.scene.layout.HBox
 import javafx.scene.layout.VBox
 import openq.ApplicationStarter
@@ -151,6 +152,46 @@ class ChannelView(): BorderPane() {
         return box
     }
 
+    // 新建关键帧按钮
+    private fun buildFrameButton(analyseKeyFrame: AnalyseKeyFrame, analyseKeyFrameList: ArrayList<AnalyseKeyFrame>): Button {
+        val frameButton = Button(analyseKeyFrame.name)
+        frameButton.prefHeight = 80.0
+        frameButton.prefWidth = 80.0
+        frameButton.text = analyseKeyFrame.name
+        // 捕获一些外部变量
+        val capturedIndex = analyseKeyFrameList.size - 1 // 捕获索引
+
+        // 设置Button的ContextMenu
+        val contextMenu = ContextMenu()
+        val deleteMenuItem = MenuItem("delete")
+        val forwardMenuItem = MenuItem("forward")
+        val backMenuItem = MenuItem("back")
+        contextMenu.items.addAll(forwardMenuItem, backMenuItem, deleteMenuItem)
+        frameButton.contextMenu = contextMenu
+
+        // 设置Button点击之后的动作
+        frameButton.setOnAction {
+            // 按钮点击的时候，要显示详情
+            val selectedItemString = channelTabPane.selectionModel.selectedItem.text
+            val channelSetting = channelCache[selectedItemString]!!
+            val resourceNameList = ApplicationStarter.getSingletonComponent(MainView::class.java)!!.getResourceNameList()
+            frameSettingDialog.accept(channelSetting)
+            frameSettingDialog.accept(resourceNameList)
+            // FIXME 显示BUG修改
+            frameSettingDialog.accept(analyseKeyFrame)
+            val modification = frameSettingDialog.showAndWait()
+            // 查看是否发生了更改
+            if (!modification.isPresent) return@setOnAction
+            // 更新UI显示
+            val newSetting = modification.get()
+            frameButton.text = newSetting.name
+            // 更新缓存
+            channelFramesCache[channelSetting.channelName]!![capturedIndex] = newSetting
+
+        }
+        return frameButton
+    }
+
     // 新建分析通道Tab
     private fun buildChannelTab(channelSetting: ChannelSetting):Tab {
         val tab = Tab(channelSetting.channelName)
@@ -170,16 +211,13 @@ class ChannelView(): BorderPane() {
             val frameSettingOptional = frameSettingDialog.showAndWait()
             if (!frameSettingOptional.isPresent) return@setOnAction
             val frameSetting = frameSettingOptional.get()
-            // 更新关键帧通道列表UI显示
-            val frameButton = Button(frameSetting.name)
-            frameButton.prefHeight = 80.0
-            frameButton.prefWidth = 80.0
-            box.children.add(box.children.size - 1, frameButton)
             // 添加分析关键帧缓存列表
             channelFramesCache[channelSetting.channelName]!!.add(frameSetting)
+            // 更新关键帧通道列表UI显示
+            val frameButton = buildFrameButton(frameSetting, channelFramesCache[channelSetting.channelName]!!)
+            box.children.add(box.children.size - 1, frameButton)
 
         }
-        HBox.setMargin(newFrameButton, Insets(10.0))
         box.children.add(newFrameButton)
         box.padding = Insets(10.0)
         box.spacing = 20.0

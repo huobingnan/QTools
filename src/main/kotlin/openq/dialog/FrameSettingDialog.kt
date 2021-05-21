@@ -85,4 +85,9 @@ class FrameSettingDialog(): Dialog<AnalyseKeyFrame>() {
         resourceNameComboBox.items.addAll(resourceNameList)
         if (resourceNameList.isNotEmpty()) resourceNameComboBox.selectionModel.select(0)
     }
+
+    fun accept(analyseKeyFrame: AnalyseKeyFrame) {
+        keyFrameTextField.text = analyseKeyFrame.name
+        resourceNameComboBox.selectionModel.select(analyseKeyFrame.resourceName)
+    }
 }
