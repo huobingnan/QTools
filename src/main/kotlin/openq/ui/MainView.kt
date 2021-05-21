@@ -183,4 +183,8 @@ class MainView() : BorderPane() {
         return graphArea.tabs.map { it.text }
     }
 
+    fun getResourceNameList(): List<String> {
+        return resourceBrowserListView.items
+    }
+
 }
