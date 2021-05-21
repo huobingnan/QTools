@@ -1,8 +1,10 @@
 package openq.ui
 
 import javafx.geometry.Insets
+import javafx.geometry.Pos
 import javafx.scene.control.*
 import javafx.scene.layout.BorderPane
+import javafx.scene.layout.HBox
 import javafx.scene.layout.VBox
 import openq.ApplicationStarter
 import openq.dialog.ChannelSettingDialog
@@ -57,9 +59,8 @@ class ChannelView(): BorderPane() {
                         renameAlert.showAndWait()
                     }else {
                         channelCache[channelSetting.channelName] = channelSetting // 缓存channel设置的信息
-                        val tab = Tab(channelSetting.channelName)
-                        tab.isClosable = false
-                        channelTabPane.tabs.add(tab)
+                        // 更新UI界面显示
+                        channelTabPane.tabs.add(buildChannelTab(channelSetting))
                         break
                     }
                 } else {
@@ -132,6 +133,21 @@ class ChannelView(): BorderPane() {
         VBox.setMargin(settingButton, Insets(8.0))
         VBox.setMargin(deleteButton, Insets(8.0))
         return box
+    }
+
+    // 新建分析通道Tab
+    private fun buildChannelTab(channelSetting: ChannelSetting):Tab {
+        val tab = Tab(channelSetting.channelName)
+        tab.isClosable = false
+        val box = HBox() // 新建一个水平的Box
+        val newFrameButton = Button("add")
+        newFrameButton.prefWidth = 100.0
+        newFrameButton.prefHeight = 100.0
+        HBox.setMargin(newFrameButton, Insets(10.0))
+        box.children.add(newFrameButton)
+        box.alignment = Pos.CENTER_LEFT
+        tab.content = box
+        return tab
     }
 
 

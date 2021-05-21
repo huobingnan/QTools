@@ -14,7 +14,9 @@ import openq.model.Contcar
 import openq.vasp.ContcarFileParser
 import java.text.ParseException
 
-
+/**
+ * 程序主界面
+ */
 class MainView() : BorderPane() {
 
     // contcar文件解析缓存

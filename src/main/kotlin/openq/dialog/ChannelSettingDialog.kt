@@ -122,7 +122,7 @@ class ChannelSettingDialog() : Dialog<ChannelSetting>(){
     init {
         dialogPane.content = setupContentPane()
         dialogPane.buttonTypes.addAll(ButtonType.CANCEL, ButtonType.OK)
-        title = "new channel options"
+        title = "channel options"
         setResultConverter {
             if (it == ButtonType.OK) {
                 val channelSetting = ChannelSetting(
