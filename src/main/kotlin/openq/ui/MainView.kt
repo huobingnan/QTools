@@ -7,6 +7,7 @@ import javafx.scene.Node
 import javafx.scene.control.*
 import javafx.scene.layout.BorderPane
 import javafx.stage.FileChooser
+import openq.ApplicationStarter
 import openq.dialog.ContcarDetailDialog
 import openq.dialog.ExceptionDialog
 import openq.model.Contcar
@@ -51,6 +52,10 @@ class MainView() : BorderPane() {
 
     init {
         center = setupCenter()
+    }
+
+    init {
+        ApplicationStarter.registerSingletonComponent(this)
     }
 
     // ------------------------------Event handler-------------------------------
@@ -135,7 +140,10 @@ class MainView() : BorderPane() {
         detailMenuItem.setOnAction {
             onDetailMenuItemClicked(it)
         }
-        contextMenu.items.addAll(importMenuItem, detailMenuItem, deleteMenuItem)
+        // 3D模型视图 TODO
+        val threeDViewMenuItem = MenuItem("3D view")
+
+        contextMenu.items.addAll(importMenuItem, detailMenuItem, deleteMenuItem, threeDViewMenuItem)
         listView.contextMenu = contextMenu
         // 设置listview的双击事件
         listView.setOnMouseClicked {
@@ -166,6 +174,11 @@ class MainView() : BorderPane() {
         pane.setDividerPositions(.80, .20)
         pane.items.addAll(resourceAndGraphSplitPane, channelView)
         return pane
+    }
+
+    //----------------------------------Business method--------------------------------
+    fun getGraphAreaNameList(): List<String> {
+        return graphArea.tabs.map { it.text }
     }
 
 }

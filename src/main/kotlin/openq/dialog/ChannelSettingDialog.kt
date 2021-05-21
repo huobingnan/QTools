@@ -123,6 +123,22 @@ class ChannelSettingDialog() : Dialog<ChannelSetting>(){
         dialogPane.content = setupContentPane()
         dialogPane.buttonTypes.addAll(ButtonType.CANCEL, ButtonType.OK)
         title = "new channel options"
+        setResultConverter {
+            if (it == ButtonType.OK) {
+                val channelSetting = ChannelSetting(
+                    channelNameTextField.text,
+                    channelTypeComboBox.selectionModel.selectedItem,
+                    graphAreaComboBox.selectionModel.selectedItem,
+                    showTypeComboBox.selectionModel.selectedItem
+                )
+                settingTableView.items.forEach { channelSettingPair ->
+                    channelSetting.extSetting[channelSettingPair.settingName] = channelSettingPair.settingValue
+                }
+                channelSetting
+            } else {
+                null
+            }
+        }
     }
 
 
@@ -150,12 +166,32 @@ class ChannelSettingDialog() : Dialog<ChannelSetting>(){
         return pane
     }
 
+    fun accept(graphAreaNameList: List<String>) {
+        graphAreaComboBox.items.clear()
+        graphAreaComboBox.items.addAll(graphAreaNameList)
+        if (graphAreaComboBox.items.size > 0) {
+            graphAreaComboBox.selectionModel.select(0)
+        }
+    }
+
+    fun accept(channelSetting: ChannelSetting) {
+        clear()
+        // 设置channelName不可编辑
+        channelNameTextField.isEditable = false
+        channelNameTextField.text = channelSetting.channelName
+        channelTypeComboBox.selectionModel.select(channelSetting.channelType)
+        showTypeComboBox.selectionModel.select(channelSetting.showType)
+        graphAreaComboBox.selectionModel.select(channelSetting.showArea)
+        channelSetting.extSetting.forEach { (t, u) ->  settingTableView.items.add(ChannelSettingPair(t, u))}
+    }
+
     /**
      * 清楚对话框状态
      */
     fun clear() {
         channelNameTextField.text = ""
         settingTableView.items.clear()
+        channelNameTextField.isEditable = true
     }
 
 }

@@ -8,7 +8,6 @@ import javafx.scene.control.TableView
 import javafx.scene.control.cell.PropertyValueFactory
 import javafx.scene.layout.GridPane
 import openq.model.Contcar
-import java.util.*
 
 
 class ContcarDetailDialog(): Dialog<Void>() {
