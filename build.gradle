@@ -1,3 +1,10 @@
+buildscript {
+    dependencies {
+        // 引入javafx packager plugin
+        classpath 'io.github.fvarrui:javapackager:1.5.1'
+    }
+}
+
 plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.4.10'
     id 'org.openjfx.javafxplugin' version '0.0.9'
@@ -6,7 +13,9 @@ plugins {
 javafx {
     version = "11.0.2"
     modules "javafx.controls", "javafx.fxml"
+    targetCompatibility = JavaVersion.VERSION_1_8
 }
+
 
 group 'openq'
 
@@ -38,6 +47,33 @@ dependencies {
     // https://mvnrepository.com/artifact/org.openjfx/javafx-fxml
     compile group: 'org.openjfx', name: 'javafx-fxml', version: '11.0.2'
 }
+
+// 使用javafx packager plugin
+apply plugin: 'io.github.fvarrui.javapackager.plugin'
+
+// Windows平台程序打包发布task
+task distributeWindows(type: io.github.fvarrui.javapackager.gradle.PackageTask, dependsOn: build) {
+    // mandatory
+    mainClass = 'openq.ApplicationMainKt'
+    // optional
+    bundleJre = false
+    generateInstaller = false
+    administratorRequired = false
+    platform = io.github.fvarrui.javapackager.model.Platform.windows
+    additionalResources = []
+}
+
+// MacOS平台程序发布
+task distributeMacOS(type: io.github.fvarrui.javapackager.gradle.PackageTask, dependsOn: build) {
+    mainClass = 'openq.ApplicationMainKt'
+    bundleJre = false
+    generateInstaller = true
+    administratorRequired = true
+    platform = io.github.fvarrui.javapackager.model.Platform.mac
+
+}
+
+
 
 
 
