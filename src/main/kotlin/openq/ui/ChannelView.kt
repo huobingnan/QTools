@@ -142,6 +142,7 @@ class ChannelView(): BorderPane() {
 
     private fun setupLeft(): VBox {
         val box = VBox()
+        box.alignment = Pos.CENTER
         box.children.addAll(showButton, newButton, settingButton, deleteButton)
         VBox.setMargin(showButton, Insets(8.0))
         VBox.setMargin(newButton, Insets(8.0))
@@ -153,9 +154,10 @@ class ChannelView(): BorderPane() {
     // 新建分析通道Tab
     private fun buildChannelTab(channelSetting: ChannelSetting):Tab {
         val tab = Tab(channelSetting.channelName)
-        // TODO 为HBox添加ScoreBar
         tab.isClosable = false
+
         val box = HBox() // 新建一个水平的Box
+        val scrollPane = ScrollPane(box) // 新建一个滚动条面板
         val newFrameButton = Button()
         newFrameButton.prefWidth = 80.0
         newFrameButton.prefHeight = 80.0
@@ -182,7 +184,7 @@ class ChannelView(): BorderPane() {
         box.padding = Insets(10.0)
         box.spacing = 20.0
         box.alignment = Pos.CENTER_LEFT
-        tab.content = box
+        tab.content = scrollPane
         return tab
     }
 
