@@ -5,6 +5,7 @@ buildscript {
     }
 }
 
+
 plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.4.10'
     id 'org.openjfx.javafxplugin' version '0.0.9'
@@ -33,19 +34,24 @@ repositories {
 }
 
 dependencies {
+    def javafxVersion = "11.0.2"
     compile "org.jetbrains.kotlin:kotlin-stdlib"
 
     // https://mvnrepository.com/artifact/org.openjfx/javafx-controls
-    implementation group: 'org.openjfx', name: 'javafx-controls', version: '11.0.2'
+    implementation group: 'org.openjfx', name: 'javafx-controls', version: javafxVersion
+
+    // https://mvnrepository.com/artifact/junit/junit
+    testImplementation group: 'junit', name: 'junit', version: '4.12'
+
 
     // https://mvnrepository.com/artifact/org.openjfx/javafx-base
-    compile group: 'org.openjfx', name: 'javafx-base', version: '11.0.2'
+    compile group: 'org.openjfx', name: 'javafx-base', version: javafxVersion
 
     // https://mvnrepository.com/artifact/org.openjfx/javafx-graphics
-    compile group: 'org.openjfx', name: 'javafx-graphics', version: '11.0.2'
+    compile group: 'org.openjfx', name: 'javafx-graphics', version: javafxVersion
 
     // https://mvnrepository.com/artifact/org.openjfx/javafx-fxml
-    compile group: 'org.openjfx', name: 'javafx-fxml', version: '11.0.2'
+    compile group: 'org.openjfx', name: 'javafx-fxml', version: javafxVersion
 }
 
 // 使用javafx packager plugin

@@ -8,6 +8,7 @@ import javafx.scene.control.cell.PropertyValueFactory
 import javafx.scene.layout.GridPane
 import openq.model.ChannelSetting
 import openq.model.ChannelSettingPair
+import openq.model.property.SettingItemDialogProperties
 
 /**
  * 对分析通道进行设置的对话框
@@ -105,7 +106,9 @@ class ChannelSettingDialog() : Dialog<ChannelSetting>(){
                 val selectedItem = settingTableView.selectionModel.selectedItem
                 val selectedIndex = settingTableView.selectionModel.selectedIndex
                 if (selectedItem != null) {
-                    settingItemDialog.accept(selectedItem)
+                    SettingItemDialogProperties.value.value = selectedItem.settingValue
+                    //SettingItemDialogProperties.name.value = selectedItem.settingName
+                    //settingItemDialog.accept(selectedItem)
                     val modified = settingItemDialog.showAndWait()
                     if (modified.isPresent) {
                         // 出现了更改, 替换原来的显示项目

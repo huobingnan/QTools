@@ -7,6 +7,7 @@ import javafx.scene.control.*
 import javafx.scene.layout.GridPane
 import openq.constants.ChannelExtSettingKey
 import openq.model.ChannelSettingPair
+import openq.model.property.SettingItemDialogProperties
 
 
 class SettingItemDialog(): Dialog<ChannelSettingPair>() {
@@ -15,12 +16,14 @@ class SettingItemDialog(): Dialog<ChannelSettingPair>() {
         val result = ComboBox<String>(FXCollections.observableArrayList())
         result.items.addAll(ChannelExtSettingKey.BOND_LENGTH_MAX, ChannelExtSettingKey.BOND_NUMBER_CONSTRAIN)
         result.selectionModel.select(0)
+
         result.prefWidth = 300.0
         result
     }
 
     private val settingValueTextField: TextField by lazy {
         val result = TextField()
+        SettingItemDialogProperties.value.bindBidirectional(result.textProperty())
         result.prefWidth = 300.0
         result
     }
@@ -55,7 +58,7 @@ class SettingItemDialog(): Dialog<ChannelSettingPair>() {
     }
 
     fun clear() {
-        settingValueTextField.text = ""
+        //SettingItemDialogProperties.value.value = ""
     }
 
     // 接收一个ChannelSettingPair对象，并显示详情

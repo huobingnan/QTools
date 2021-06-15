@@ -15,6 +15,7 @@ import openq.dialog.ChannelSettingDialog
 import openq.dialog.FrameSettingDialog
 import openq.model.AnalyseKeyFrame
 import openq.model.ChannelSetting
+import openq.model.property.GraphAreaProperties
 
 /**
  * 分析通道视图
@@ -54,7 +55,7 @@ class ChannelView(): BorderPane() {
             // 清除对话框之前的显示内容
             channelSettingDialog.clear()
             // 查看当前的可选的显示区域
-            val graphAreaName = ApplicationStarter.getSingletonComponent(MainView::class.java)!!.getGraphAreaNameList()
+            val graphAreaName = GraphAreaProperties.graphTabList.value.map { it.text }
             channelSettingDialog.accept(graphAreaName)
             var renameAlert: Alert? = null
             // 显示对话框
