@@ -2,13 +2,22 @@ package openq.vasp
 
 import openq.model.*
 import org.jblas.DoubleMatrix
+import org.slf4j.LoggerFactory
 import java.lang.Exception
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
+import kotlin.math.log
 
+/**
+ * 键长分析模块
+ */
 class BondLength {
+
+
     companion object {
+
+        private val log = LoggerFactory.getLogger(BondLength::class.java)
 
         @JvmStatic fun componentCombinationSelect(num: Int, componentList: List<String>): ArrayList<ArrayList<String>> {
             val result: ArrayList<ArrayList<String>>  = ArrayList()
@@ -48,7 +57,6 @@ class BondLength {
             */
             val bondDistanceResult = java.util.ArrayList<MutableMap<String, Double>>()
 
-            // 先设置为默认值
 
             // 先设置为默认值
             var distanceMax: Double = java.lang.Double.parseDouble(
@@ -59,6 +67,9 @@ class BondLength {
                 try {
                     distanceMax = channelSetting.extSetting[ExtChannelSettings.BOND_LENGTH_MAX]!!.toDouble()
                 } catch (ignored: Exception) {
+                    if (log.isDebugEnabled) {
+                        log.error("${ignored.message}")
+                    }
                 }
             }
 
@@ -70,11 +81,16 @@ class BondLength {
                 val resource = resourceCache[frame.resourceName]!!
                 // 转换为通用坐标形式
                 val commonCoordinate = Resource.convertCoordinateToCommonType(resource)
-                val componentList: Set<String> = commonCoordinate.map { "${it.symbol}${it.sequenceNumber}" }.toSet()
+                val componentList: Set<String> = commonCoordinate.map {
+                    "${it.symbol}${it.sequenceNumber}"
+                }.toSet()
+                if (log.isDebugEnabled) {
+                    log.debug("组分集合：{}", componentList.toString())
+                }
                 // 查找表
                 val componentAndCoordinate = HashMap<String, DoubleArray>()
                 commonCoordinate.forEach {
-                    componentAndCoordinate["{${it.symbol}${it.sequenceNumber}}"] = doubleArrayOf(it.x, it.y, it.z)
+                    componentAndCoordinate["${it.symbol}${it.sequenceNumber}"] = doubleArrayOf(it.x, it.y, it.z)
                 }
                 // 对计算体系中的原子进行组合，得到候选化学键集合
                 val combinationResult: List<List<String>> =

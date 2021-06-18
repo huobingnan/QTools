@@ -2,6 +2,7 @@ package openq.model
 
 import openq.constants.CoordinateType
 import org.jblas.DoubleMatrix
+import org.slf4j.LoggerFactory
 
 /**
  * 解析的文件资源
@@ -15,6 +16,7 @@ class Resource {
     var instance: Any? = null
 
     companion object {
+        private val log = LoggerFactory.getLogger(Resource::class.java)
         const val VASP = "vasp"
         const val GAUSSIAN = "gaussian"
 
@@ -28,14 +30,25 @@ class Resource {
             val size = contcar.componentsCoordinate.size
             var componentCnt = 1
             var componentCursor = 0
+            // 构造基矢
+            val base = DoubleMatrix(3,3,
+                contcar.matrix!![0][0], contcar.matrix!![1][0], contcar.matrix!![2][0],
+                contcar.matrix!![0][1], contcar.matrix!![1][1], contcar.matrix!![2][1],
+                contcar.matrix!![0][2], contcar.matrix!![1][2], contcar.matrix!![2][2],
+            )
+            if (log.isDebugEnabled) {
+                log.debug("晶胞基矢初始化完毕！")
+                log.debug("基矢 : {}", base.toString())
+            }
             while (i < size) {
                 val componentNow = contcar.componentsNameList!![componentCursor]
                 // BUGFIX 2021-6-18 如果是Fraction类型的坐标，需要进行一定的转换才可以使用
                 var coordinate = contcar.componentsCoordinate[i]
-                val base = DoubleMatrix(3,3)
-                // TODO 构造基矢
                 if (contcar.coordinateType == CoordinateType.Direct) {
-
+                    // 分数坐标要进行转换
+                    coordinate = base.mulColumnVector(
+                        DoubleMatrix(3,1, coordinate[0], coordinate[1], coordinate[2])
+                    ).toArray().toTypedArray()
                 }
                 coordinates.add(
                     AtomCoordinate(

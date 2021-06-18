@@ -51,8 +51,9 @@ class ChannelView(): BorderPane() {
                 // 获取到当前正在显示的tab
                 val channel = selectedItem.text
                 val keyFramesButtonContainer = channelFrameListCache[channel]!!
-                // 获取到关键帧列表
-                val keyFrameList = keyFramesButtonContainer.children.map {
+                // 获取到关键帧列表, 排除最后一个添加Button
+                val keyFrameList = keyFramesButtonContainer.children
+                    .subList(0, keyFramesButtonContainer.children.size - 1).map {
                     (it as KeyFrameButton).getAnalyseKeyFrame()
                 }
                 // 获取到当前分析通道的设置

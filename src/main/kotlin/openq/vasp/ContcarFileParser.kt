@@ -1,12 +1,12 @@
 package openq.vasp
 import openq.constants.CoordinateType
 import openq.model.Contcar
+import openq.util.Strings
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileReader
 import java.lang.Exception
 import java.text.ParseException
-import kotlin.collections.ArrayList
 
 class ContcarFileParser {
 
@@ -16,7 +16,7 @@ class ContcarFileParser {
         private val parseScale = {line: String, contcar: Contcar -> contcar.scale = line.toDouble()}
 
         private val parseVectorA = {line: String, contcar: Contcar ->
-            val vectorA = splitStringByAnyBlanks(line)
+            val vectorA = Strings.splitStringByAnyBlanks(line)
             // 初始化矩阵
             contcar.matrix = Array(3) {Array(3){0.0} }
             for (i in vectorA.indices) {
@@ -26,7 +26,7 @@ class ContcarFileParser {
 
         // 解析晶胞向量 b
         private val parseVectorB = {line: String, contcar: Contcar ->
-            val vectorB = splitStringByAnyBlanks(line)
+            val vectorB =  Strings.splitStringByAnyBlanks(line)
             for (i in vectorB.indices) {
                 contcar.matrix!![1][i] = vectorB[i].toDouble()
             }
@@ -35,7 +35,7 @@ class ContcarFileParser {
 
         // 解析晶胞向量 c
         private val parseVectorC = {line: String, contcar: Contcar ->
-            val vectorC = splitStringByAnyBlanks(line)
+            val vectorC =  Strings.splitStringByAnyBlanks(line)
             for (i in vectorC.indices) {
                 contcar.matrix!![2][i] = vectorC[i].toDouble()
             }
@@ -43,12 +43,12 @@ class ContcarFileParser {
 
         // 解析化学体系中的组分
         private val parseComponents = {line: String, contcar: Contcar ->
-            contcar.componentsNameList = splitStringByAnyBlanks(line)
+            contcar.componentsNameList =  Strings.splitStringByAnyBlanks(line)
         }
 
         // 解析化学体系中各个组分的数目
         private val parseComponentsNumber = {line: String, contcar: Contcar ->
-            contcar.componentsNumberList = splitStringByAnyBlanks(line).map { it.toInt() }
+            contcar.componentsNumberList =  Strings.splitStringByAnyBlanks(line).map { it.toInt() }
         }
 
         // 解析晶体的坐标类型
@@ -71,44 +71,12 @@ class ContcarFileParser {
         private val parseComponentsCoordinate = {line: String, contcar: Contcar ->
             val total = sum(contcar.componentsNumberList!!)
             if (contcar.componentAmount < total) {
-                val coordinate = splitStringByAnyBlanks(line)
+                val coordinate =  Strings.splitStringByAnyBlanks(line)
                 val coordinateDoubleArray = coordinate.map { it.toDouble() }.toTypedArray()
                 contcar.componentsCoordinate.add(coordinateDoubleArray)
                 contcar.componentAmount++
             }
         }
-
-
-        /**
-         * 将一个字符串按照任意数量的空格进行分隔
-         * @param str 输入字符串
-         * @return 分隔完毕之后的字符串数组
-         */
-        private fun splitStringByAnyBlanks(str: String?): List<String> {
-            val res = ArrayList<String>()
-            if (str != null) {
-                val charArray = str.toCharArray()
-                val stringBuilder = StringBuilder()
-
-                for (ch in charArray) {
-                    if (ch != ' ') {
-                        stringBuilder.append(ch)
-                    } else {
-                        // 添加到res中
-                        if (stringBuilder.isNotEmpty()) {
-                            res.add(stringBuilder.toString())
-                            stringBuilder.setLength(0)
-                        }
-                    }
-                }
-                if (stringBuilder.isNotEmpty()) {
-                    res.add(stringBuilder.toString())
-                }
-            }
-            return res
-        }
-
-
 
         @JvmStatic fun parse(contcarFile: File): Contcar {
             var lineNumber = 1 // 当前解析到多少行
