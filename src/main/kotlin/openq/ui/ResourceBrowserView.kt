@@ -103,12 +103,12 @@ class ResourceBrowserView(): BorderPane() {
                 if (resourceType == "VASP output file") {
                     val contcar = ContcarFileParser.parse(file)
                     resource.instance = contcar
-                    resource.type = "vasp"
+                    resource.type = Resource.VASP
                     resource.name = name!!
                 }else if (resourceType == "Gaussian log file") {
                     val gaussianLog = GaussianFileParser.parse(file)
                     resource.instance = gaussianLog
-                    resource.type = "gaussian"
+                    resource.type = Resource.GAUSSIAN
                     resource.name = name!!
                 }else {
                     return
