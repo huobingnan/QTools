@@ -16,6 +16,7 @@ import openq.dialog.FrameSettingDialog
 import openq.model.AnalyseKeyFrame
 import openq.model.ChannelSetting
 import openq.model.property.GraphAreaProperties
+import openq.vasp.BondLength
 
 /**
  * 分析通道视图
@@ -44,6 +45,31 @@ class ChannelView(): BorderPane() {
     private val showButton: Button by lazy {
         val result = Button("show")
         result.prefWidth = 80.0
+        result.setOnAction {
+            val selectedItem = channelTabPane.selectionModel.selectedItem
+            if (selectedItem != null) {
+                // 获取到当前正在显示的tab
+                val channel = selectedItem.text
+                val keyFramesButtonContainer = channelFrameListCache[channel]!!
+                // 获取到关键帧列表
+                val keyFrameList = keyFramesButtonContainer.children.map {
+                    (it as KeyFrameButton).getAnalyseKeyFrame()
+                }
+                // 获取到当前分析通道的设置
+                val channelSetting = channelCache[channel]!!
+                // 获取资源信息
+                val resources = ApplicationStarter.getSingletonComponent(ResourceBrowserView::class.java)!!.getResources()
+
+                // 根据分析通道的设置，展示分析结果
+                if (channelSetting.channelType == ChannelSetting.TYPE_BOND_LENGTH) {
+                    BondLength.perform(keyFrameList, resources, channelSetting)
+                }
+
+            }else {
+                // 没有任何显示的分析通道，所以不可以展示信息
+                // TODO 设置一个交互反馈
+            }
+        }
         result
     }
 
@@ -55,7 +81,7 @@ class ChannelView(): BorderPane() {
             // 清除对话框之前的显示内容
             channelSettingDialog.clear()
             // 查看当前的可选的显示区域
-            val graphAreaName = GraphAreaProperties.graphTabList.value.map { it.text }
+            val graphAreaName = ApplicationStarter.getSingletonComponent(MainView::class.java)!!.getGraphAreaNameList()
             channelSettingDialog.accept(graphAreaName)
             var renameAlert: Alert? = null
             // 显示对话框
@@ -144,7 +170,7 @@ class ChannelView(): BorderPane() {
 
     private fun setupLeft(): VBox {
         val box = VBox()
-        box.alignment = Pos.CENTER
+        box.alignment = Pos.TOP_CENTER
         box.children.addAll(showButton, newButton, settingButton, deleteButton)
         VBox.setMargin(showButton, Insets(8.0))
         VBox.setMargin(newButton, Insets(8.0))
@@ -192,7 +218,6 @@ class ChannelView(): BorderPane() {
     private fun buildChannelTab(channelSetting: ChannelSetting):Tab {
         val tab = Tab(channelSetting.channelName)
         tab.isClosable = false
-
         val box = HBox() // 新建一个水平的Box
         val scrollPane = ScrollPane(box) // 新建一个滚动条面板
         val newFrameButton = Button()

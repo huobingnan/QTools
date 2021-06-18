@@ -6,6 +6,7 @@ import javafx.scene.Node
 import javafx.scene.control.*
 import javafx.scene.control.cell.PropertyValueFactory
 import javafx.scene.layout.GridPane
+import jfxtras.styles.jmetro.JMetroStyleClass
 import openq.model.ChannelSetting
 import openq.model.ChannelSettingPair
 import openq.model.property.SettingItemDialogProperties
@@ -28,7 +29,7 @@ class ChannelSettingDialog() : Dialog<ChannelSetting>(){
 
     private val channelTypeComboBox: ComboBox<String> by lazy {
         val result = ComboBox<String>(FXCollections.observableArrayList())
-        result.items.addAll("bond length", "bond angle")
+        result.items.addAll(ChannelSetting.TYPE_BOND_LENGTH, ChannelSetting.TYPE_BOND_ANGLE)
         result.selectionModel.select(0)
         result.prefWidth = 300.0
         result

@@ -2,6 +2,17 @@ package openq.model
 
 import openq.constants.CoordinateType
 
+/**
+ * VASP坐标文件形式
+ * name：VASP计算例程的名字
+ * scale：缩放比例
+ * matrix：晶胞矩阵
+ * componentsNameList：元素名称列表
+ * componentNumberList：元素数量列表
+ * coordinateType：坐标类型：分为分数坐标和笛卡尔坐标两种形式
+ * componentAmount: 元素数量
+ * componentCoordinates: 元素的坐标
+ */
 data class Contcar(
     var name: String,
     var scale: Double,

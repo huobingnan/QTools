@@ -1,7 +1,6 @@
 package openq
 
 import javafx.application.Application
-import javafx.fxml.FXMLLoader
 import javafx.scene.Scene
 import javafx.stage.Stage
 import openq.ui.MainView
@@ -24,7 +23,6 @@ class ApplicationStarter: Application(){
         primaryStage!!.width = 1000.0
         primaryStage.height = 800.0
         primaryStage.title = "GemoVASP"
-
         primaryStage.scene =  Scene(MainView())
         primaryStage.show()
     }

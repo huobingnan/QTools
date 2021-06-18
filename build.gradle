@@ -43,9 +43,14 @@ dependencies {
     // https://mvnrepository.com/artifact/junit/junit
     testImplementation group: 'junit', name: 'junit', version: '4.12'
 
-
     // https://mvnrepository.com/artifact/org.openjfx/javafx-base
     compile group: 'org.openjfx', name: 'javafx-base', version: javafxVersion
+
+    compile 'org.jfxtras:jmetro:11.6.14'
+
+    // https://mvnrepository.com/artifact/org.jblas/jblas JBLAS 矩阵运算库的支持
+    implementation group: 'org.jblas', name: 'jblas', version: '1.2.3'
+
 
     // https://mvnrepository.com/artifact/org.openjfx/javafx-graphics
     compile group: 'org.openjfx', name: 'javafx-graphics', version: javafxVersion

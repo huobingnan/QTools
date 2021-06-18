@@ -5,7 +5,7 @@ import javafx.geometry.Insets
 import javafx.scene.Node
 import javafx.scene.control.*
 import javafx.scene.layout.GridPane
-import openq.constants.ChannelExtSettingKey
+import openq.model.ExtChannelSettings
 import openq.model.ChannelSettingPair
 import openq.model.property.SettingItemDialogProperties
 
@@ -14,7 +14,7 @@ class SettingItemDialog(): Dialog<ChannelSettingPair>() {
 
     private val settingItemComboBox: ComboBox<String> by lazy {
         val result = ComboBox<String>(FXCollections.observableArrayList())
-        result.items.addAll(ChannelExtSettingKey.BOND_LENGTH_MAX, ChannelExtSettingKey.BOND_NUMBER_CONSTRAIN)
+        result.items.addAll(ExtChannelSettings.BOND_LENGTH_MAX, ExtChannelSettings.BOND_NUMBER_CONSTRAIN)
         result.selectionModel.select(0)
 
         result.prefWidth = 300.0

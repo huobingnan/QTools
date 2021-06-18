@@ -5,9 +5,9 @@ import javafx.event.ActionEvent
 import javafx.scene.control.*
 import javafx.scene.layout.BorderPane
 import javafx.stage.FileChooser
+import openq.ApplicationStarter
 import openq.dialog.DetailDialog
 import openq.dialog.ExceptionDialog
-import openq.model.Contcar
 import openq.model.Resource
 import openq.vasp.ContcarFileParser
 import openq.vasp.GaussianFileParser
@@ -52,12 +52,15 @@ class ResourceBrowserView(): BorderPane() {
         r
     }
 
-    private val contcarFileCache = HashMap<String, Contcar>()
     private val resourceCache = HashMap<String, Resource>()
 
 
     init {
         center = resourceBrowserListView
+    }
+
+    init {
+        ApplicationStarter.registerSingletonComponent(this)
     }
 
     // ------------------------------ ListView ContextMenu的点击事件处理 -------------------------------
@@ -184,6 +187,10 @@ class ResourceBrowserView(): BorderPane() {
     // ---------------------------- 业务逻辑方法 -----------------------------------
     fun getResourceNameList(): List<String> {
         return resourceCache.keys.toList()
+    }
+
+    fun getResources(): Map<String, Resource> {
+        return resourceCache
     }
 
 }
