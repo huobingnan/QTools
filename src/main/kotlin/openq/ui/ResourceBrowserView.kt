@@ -59,10 +59,6 @@ class ResourceBrowserView(): BorderPane() {
         center = resourceBrowserListView
     }
 
-    init {
-        ApplicationStarter.registerSingletonComponent(this)
-    }
-
     // ------------------------------ ListView ContextMenu的点击事件处理 -------------------------------
     private fun onImportMenuItemClicked(action: ActionEvent?) {
         // 2021-06-15 添加了对高斯文件解析的支持，所以这里在导入之前会弹出一个对话框，确定导入文件的类型

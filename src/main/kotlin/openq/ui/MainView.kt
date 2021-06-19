@@ -4,7 +4,6 @@ import javafx.geometry.Orientation
 import javafx.scene.Node
 import javafx.scene.control.*
 import javafx.scene.layout.BorderPane
-import openq.ApplicationStarter
 
 
 /**
@@ -30,12 +29,6 @@ class MainView() : BorderPane() {
     init {
         center = setupCenter()
     }
-
-    init {
-        ApplicationStarter.registerSingletonComponent(this)
-    }
-
-
 
     private fun setupGraphArea(): TabPane {
         val pane = TabPane()

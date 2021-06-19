@@ -59,7 +59,7 @@ class ChannelView(): BorderPane() {
                 // 获取到当前分析通道的设置
                 val channelSetting = channelCache[channel]!!
                 // 获取资源信息
-                val resources = ApplicationStarter.getSingletonComponent(ResourceBrowserView::class.java)!!.getResources()
+                val resources = ApplicationStarter.context.getInstance(ResourceBrowserView::class.java).getResources()
 
                 // 根据分析通道的设置，展示分析结果
                 if (channelSetting.channelType == ChannelSetting.TYPE_BOND_LENGTH) {
@@ -82,7 +82,7 @@ class ChannelView(): BorderPane() {
             // 清除对话框之前的显示内容
             channelSettingDialog.clear()
             // 查看当前的可选的显示区域
-            val graphAreaName = ApplicationStarter.getSingletonComponent(MainView::class.java)!!.getGraphAreaNameList()
+            val graphAreaName = ApplicationStarter.context.getInstance(MainView::class.java).getGraphAreaNameList()
             channelSettingDialog.accept(graphAreaName)
             var renameAlert: Alert? = null
             // 显示对话框
@@ -200,7 +200,7 @@ class ChannelView(): BorderPane() {
             // 按钮点击的时候，要显示详情
             val selectedItemString = channelTabPane.selectionModel.selectedItem.text
             val channelSetting = channelCache[selectedItemString]!!
-            val resourceNameList = ApplicationStarter.getSingletonComponent(MainView::class.java)!!.getResourceNameList()
+            val resourceNameList = ApplicationStarter.context.getInstance(MainView::class.java).getResourceNameList()
             frameSettingDialog.accept(channelSetting)
             frameSettingDialog.accept(resourceNameList)
             frameSettingDialog.accept(frameButton.getAnalyseKeyFrame())
@@ -228,7 +228,7 @@ class ChannelView(): BorderPane() {
         newFrameButton.setOnAction {
             // 新建一个关键帧
             frameSettingDialog.accept(channelSetting)
-            val resourceNameList = ApplicationStarter.getSingletonComponent(MainView::class.java)!!.getResourceNameList()
+            val resourceNameList = ApplicationStarter.context.getInstance(MainView::class.java).getResourceNameList()
             frameSettingDialog.accept(resourceNameList)
             val frameSettingOptional = frameSettingDialog.showAndWait()
             if (!frameSettingOptional.isPresent) return@setOnAction
