@@ -26,7 +26,7 @@ class ApplicationStarter: Application(){
         log.info("Application starting...")
         primaryStage!!.width = 1000.0
         primaryStage.height = 800.0
-        primaryStage.title = "GemoVASP"
+        primaryStage.title = "QTools V1.0.0(Preview)"
         primaryStage.scene =  Scene(context.getInstance(MainView::class.java))
         primaryStage.show()
     }
