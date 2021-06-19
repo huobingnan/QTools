@@ -50,7 +50,7 @@ class BondLength {
          * 执行键长变化分析
          */
         fun perform(analyseKeyFrameList: List<AnalyseKeyFrame>, resourceCache: Map<String, Resource>,
-                    channelSetting: ChannelSetting):List<Map<String, Double>> {
+                    channelSetting: ChannelSetting):BondLengthResult {
 
             /*
                 最终计算的结果，帧的查找键为帧在数组中的索引
@@ -92,6 +92,13 @@ class BondLength {
                 commonCoordinate.forEach {
                     componentAndCoordinate["${it.symbol}${it.sequenceNumber}"] = doubleArrayOf(it.x, it.y, it.z)
                 }
+//                if (log.isDebugEnabled) {
+//                    log.debug(frame.name)
+//                    componentAndCoordinate.forEach { (k, v) ->
+//                        log.debug("{} => {}", k, v.contentToString())
+//                    }
+//                }
+
                 // 对计算体系中的原子进行组合，得到候选化学键集合
                 val combinationResult: List<List<String>> =
                     componentCombinationSelect(2, java.util.ArrayList(componentList))
@@ -123,7 +130,7 @@ class BondLength {
                     }
                 }
             }
-            return bondDistanceResult
+            return BondLengthResult(analyseKeyFrameList, bondDistanceResult)
         }
     }
 }

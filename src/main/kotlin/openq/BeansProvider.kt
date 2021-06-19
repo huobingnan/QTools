@@ -2,6 +2,9 @@ package openq
 
 import com.google.inject.AbstractModule
 import com.google.inject.Scopes
+import openq.graph.BondLengthTableViewBuilder
+import openq.ui.ChannelView
+import openq.ui.GraphAreaView
 
 import openq.ui.MainView
 import openq.ui.ResourceBrowserView
@@ -18,5 +21,12 @@ class BeansProvider : AbstractModule() {
         bind(MainView::class.java).`in`(Scopes.SINGLETON)
         // 资源浏览界面
         bind(ResourceBrowserView::class.java).`in`(Scopes.SINGLETON)
+        // 结果展示界面
+        bind(GraphAreaView::class.java).`in`(Scopes.SINGLETON)
+        // 分析通道界面
+        bind(ChannelView::class.java).`in`(Scopes.SINGLETON)
+
+        // ----------------------- 图形构建器 -----------------------
+        bind(BondLengthTableViewBuilder::class.java).`in`(Scopes.SINGLETON)
     }
 }

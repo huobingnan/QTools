@@ -32,9 +32,9 @@ class Resource {
             var componentCursor = 0
             // 构造基矢
             val base = DoubleMatrix(3,3,
-                contcar.matrix!![0][0], contcar.matrix!![1][0], contcar.matrix!![2][0],
-                contcar.matrix!![0][1], contcar.matrix!![1][1], contcar.matrix!![2][1],
-                contcar.matrix!![0][2], contcar.matrix!![1][2], contcar.matrix!![2][2],
+                contcar.matrix!![0][0], contcar.matrix!![0][1], contcar.matrix!![0][2],
+                contcar.matrix!![1][0], contcar.matrix!![1][1], contcar.matrix!![1][2],
+                contcar.matrix!![2][0], contcar.matrix!![2][1], contcar.matrix!![2][2],
             )
             if (log.isDebugEnabled) {
                 log.debug("晶胞基矢初始化完毕！")
@@ -44,12 +44,20 @@ class Resource {
                 val componentNow = contcar.componentsNameList!![componentCursor]
                 // BUGFIX 2021-6-18 如果是Fraction类型的坐标，需要进行一定的转换才可以使用
                 var coordinate = contcar.componentsCoordinate[i]
+
                 if (contcar.coordinateType == CoordinateType.Direct) {
                     // 分数坐标要进行转换
-                    coordinate = base.mulColumnVector(
+                    if (log.isDebugEnabled) {
+                        val d = base.mmul(
+                            DoubleMatrix(3,1, coordinate[0], coordinate[1], coordinate[2])
+                        )
+                        log.debug("{}", d.toString())
+                    }
+                    coordinate = base.mmul(
                         DoubleMatrix(3,1, coordinate[0], coordinate[1], coordinate[2])
                     ).toArray().toTypedArray()
                 }
+
                 coordinates.add(
                     AtomCoordinate(
                         componentNow,

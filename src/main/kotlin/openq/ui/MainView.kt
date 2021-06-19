@@ -4,6 +4,7 @@ import javafx.geometry.Orientation
 import javafx.scene.Node
 import javafx.scene.control.*
 import javafx.scene.layout.BorderPane
+import openq.ApplicationStarter
 
 
 /**
@@ -11,18 +12,16 @@ import javafx.scene.layout.BorderPane
  */
 class MainView() : BorderPane() {
 
-    private val graphArea: TabPane by lazy {
-        setupGraphArea()
+    private val graphArea: GraphAreaView by lazy {
+        ApplicationStarter.context.getInstance(GraphAreaView::class.java)
     }
 
-    private val resourceBrowserListView: ResourceBrowserView by lazy {
-        ResourceBrowserView()
+    private val resourceBrowserView: ResourceBrowserView by lazy {
+        ApplicationStarter.context.getInstance(ResourceBrowserView::class.java)
     }
 
     private val channelView: ChannelView by lazy {
-        val channelView = ChannelView()
-        channelView.prefHeight = 200.0
-        channelView
+       ApplicationStarter.context.getInstance(ChannelView::class.java)
     }
 
 
@@ -30,18 +29,10 @@ class MainView() : BorderPane() {
         center = setupCenter()
     }
 
-    private fun setupGraphArea(): TabPane {
-        val pane = TabPane()
-        pane.prefWidth = 800.0
-        pane.tabs.add(Tab("Graph-1"))
-        //GraphAreaProperties.graphTabList.bind(pane.tabs) // 双向绑定 TODO
-        return pane
-    }
-
     private fun setupCenter(): Node {
         // Resource browser和Graph area为一个分隔区域
         val resourceAndGraphSplitPane = SplitPane()
-        resourceAndGraphSplitPane.items.add(resourceBrowserListView)
+        resourceAndGraphSplitPane.items.add(resourceBrowserView)
         resourceAndGraphSplitPane.items.add(graphArea)
         resourceAndGraphSplitPane.setDividerPositions(.25, .75)
         resourceAndGraphSplitPane.prefHeight = 600.0
@@ -55,11 +46,11 @@ class MainView() : BorderPane() {
 
     //----------------------------------Business method--------------------------------
     fun getGraphAreaNameList(): List<String> {
-        return graphArea.tabs.map { it.text }
+        return graphArea.getGraphArea()
     }
 
     fun getResourceNameList(): List<String> {
-        return resourceBrowserListView.getResourceNameList()
+        return resourceBrowserView.getResourceNameList()
     }
 
 }

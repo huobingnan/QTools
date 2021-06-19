@@ -43,7 +43,7 @@ class ChannelSettingDialog() : Dialog<ChannelSetting>(){
     private val showTypeComboBox: ComboBox<String> by lazy {
         val result = ComboBox<String>(FXCollections.observableArrayList())
         result.prefWidth = 300.0
-        result.items.addAll("table view", "line chart", "bar chart")
+        result.items.addAll(ChannelSetting.SHOW_TABLE_VIEW, ChannelSetting.SHOW_LINE_CHART, ChannelSetting.SHOW_BAR_CHART)
         result.selectionModel.select(0)
         result
     }

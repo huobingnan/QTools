@@ -20,5 +20,10 @@ data class ChannelSetting(
         const val TYPE_BOND_LENGTH = "bond length"
         const val TYPE_BOND_ANGLE = "bond angle"
 
+        const val SHOW_TABLE_VIEW = "table view"
+        const val SHOW_LINE_CHART = "line chart"
+        const val SHOW_BAR_CHART = "bar chart"
+
+
     }
 }

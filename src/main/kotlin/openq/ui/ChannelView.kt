@@ -5,7 +5,6 @@ import javafx.geometry.Pos
 import javafx.scene.control.*
 import javafx.scene.image.ImageView
 import javafx.scene.layout.BorderPane
-import javafx.scene.layout.GridPane
 import javafx.scene.layout.HBox
 import javafx.scene.layout.VBox
 import openq.ApplicationStarter
@@ -13,9 +12,10 @@ import openq.component.KeyFrameButton
 import openq.constants.ImageAsset
 import openq.dialog.ChannelSettingDialog
 import openq.dialog.FrameSettingDialog
+import openq.graph.BondLengthTableViewBuilder
+import openq.graph.GraphBuilder
 import openq.model.AnalyseKeyFrame
 import openq.model.ChannelSetting
-import openq.model.property.GraphAreaProperties
 import openq.vasp.BondLength
 
 /**
@@ -42,8 +42,8 @@ class ChannelView(): BorderPane() {
     }
 
     // 展示分析结果按钮
-    private val showButton: Button by lazy {
-        val result = Button("show")
+    private val executeButton: Button by lazy {
+        val result = Button("execute")
         result.prefWidth = 80.0
         result.setOnAction {
             val selectedItem = channelTabPane.selectionModel.selectedItem
@@ -63,7 +63,15 @@ class ChannelView(): BorderPane() {
 
                 // 根据分析通道的设置，展示分析结果
                 if (channelSetting.channelType == ChannelSetting.TYPE_BOND_LENGTH) {
-                    BondLength.perform(keyFrameList, resources, channelSetting)
+                    val data = BondLength.perform(keyFrameList, resources, channelSetting)
+                    val graphAreaView = ApplicationStarter.context.getInstance(GraphAreaView::class.java)
+                    var builder: GraphBuilder? = null
+                    // 选择图形构建器
+                    if (channelSetting.showType == ChannelSetting.SHOW_TABLE_VIEW){
+                        builder = ApplicationStarter.context.getInstance(BondLengthTableViewBuilder::class.java)
+                    }
+                    if (builder != null)
+                        graphAreaView.buildGraph(builder, data)
                 }
 
             }else {
@@ -166,14 +174,15 @@ class ChannelView(): BorderPane() {
     init {
         left = setupLeft()
         center = channelTabPane
+        prefHeight = 200.0
     }
 
 
     private fun setupLeft(): VBox {
         val box = VBox()
         box.alignment = Pos.TOP_CENTER
-        box.children.addAll(showButton, newButton, settingButton, deleteButton)
-        VBox.setMargin(showButton, Insets(8.0))
+        box.children.addAll(executeButton, newButton, settingButton, deleteButton)
+        VBox.setMargin(executeButton, Insets(8.0))
         VBox.setMargin(newButton, Insets(8.0))
         VBox.setMargin(settingButton, Insets(8.0))
         VBox.setMargin(deleteButton, Insets(8.0))
